@@ -2,8 +2,7 @@
  * Created by bface007 on 24/07/2016.
  */
 var app = require( '../app' ),
-    http = require( 'http' ),
-    debug = require( 'debug' )('UrbanFMAppServer:server');
+    http = require( 'http' );
 
 var server = http.createServer( app );
 
@@ -71,5 +70,5 @@ function onListening() {
     var bind = typeof addr === 'string'
         ? 'pipe ' + addr
         : 'port ' + addr.port;
-    debug('Listening on ' + bind);
+    console.log('Listening on ' + bind);
 }
