@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title><%= pageTitle %> - UrbanFM App Monitor</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,medium">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.red-blue.min.css" />
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script>
+    window.PageLoader = function ( pageLoader ) {
+
+        this.pageLoader = pageLoader || document.querySelector( "#page-loader" ) ;
+
+        this.showPageLoader = showPageLoader;
+        this.hidePageLoader = hidePageLoader;
+
+        var _self = this;
+
+        function showPageLoader() {
+            _self.pageLoader.classList.remove( "hide-opacity" );
+        }
+
+        function hidePageLoader() {
+            _self.pageLoader.classList.add( "hide-opacity" );
+        }
+    };
+    window.Toast = function () {
+
+        this._elem = document.querySelector( "#toast" );
+        this._data = {
+            message : "",
+            actionText : null,
+            actionHandler : function ( e ) {},
+            timeout : 2000
+        };
+
+        this.error = error;
+        this.success = success;
+        this.warning = warning;
+        this.info = info;
+        this.make = make;
+        this.show = show;
+
+        var _self = this;
+
+        function error( message, actionText, actionHandler, timeOut ) {
+            _self._elem.style.backgroundColor = "#f44336";
+            _make( message, actionText, actionHandler, timeOut );
+            return _self;
+        }
+        function success( message, actionText, actionHandler, timeOut ) {
+            _self._elem.style.backgroundColor = "#4CAF50";
+            _make( message, actionText, actionHandler, timeOut );
+            return _self;
+        }
+        function info( message, actionText, actionHandler, timeOut ) {
+            _self._elem.style.backgroundColor = "#2196F3";
+            _make( message, actionText, actionHandler, timeOut );
+            return _self;
+        }
+        function warning( message, actionText, actionHandler, timeOut ) {
+            _self._elem.style.backgroundColor = "#E65100";
+            _make( message, actionText, actionHandler, timeOut );
+            return _self;
+        }
+        function make( message, actionText, actionHandler, timeOut ) {
+            _make( message, actionText, actionHandler, timeOut );
+            return _self;
+        }
+        function show() {
+            _self._elem.MaterialSnackbar.showSnackbar( _self._data );
+        }
+
+        function _make( message, actionText, actionHandler, timeOut) {
+            message = message || "";
+            actionText = actionText || "Fermer";
+            actionHandler = actionHandler || function ( e ) {};
+            timeOut = timeOut || 4000;
+
+            _self._data = {
+                message: message,
+                actionHandler: actionHandler,
+                timeout: timeOut,
+                actionText: actionText
+            };
+        }
+
+    }
+  </script>
+</head>

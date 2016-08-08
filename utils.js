@@ -3,7 +3,8 @@
  */
 module.exports = {
     generateDBUri : generateDBUri,
-    StringBuilder : StringBuilder
+    StringBuilder : StringBuilder,
+    randomString  : randomString
 };
 
 function generateDBUri( dbUser, dbPassword, dbHost, dbName ) {
@@ -40,4 +41,16 @@ function StringBuilder() {
 
         return toReturn;
     }
+}
+
+function randomString( len ) {
+    var buf = []
+        , chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+        , charlen = chars.length;
+
+    for (var i = 0; i < len; ++i) {
+        buf.push(chars[getRandomInt(0, charlen - 1)]);
+    }
+
+    return buf.join('');
 }

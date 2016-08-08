@@ -1,14 +1,22 @@
 /**
  * Created by bface007 on 24/07/2016.
  */
-var app = require( '../app' ),
-    http = require( 'http' );
+var app = require( '../app' ).app,
+    http = require( 'http' ),
+    socket = require( 'socket.io' ),
+    sessionMiddleware = require( '../app' ).sessionMiddleware;
 
-var server = http.createServer( app );
+var server = http.createServer( app ),
+    io = socket( server );
 
 var port = normalizePort( process.env.VCAP_APP_PORT || 3000 );
 var host = process.env.VCAP_APP_HOST || 'localhost';
 
+io.use( function ( socket, next ) {
+    sessionMiddleware( socket.request, socket.request.res, next );
+} );
+
+require( '../app/socket/io' )( io );
 
 server.listen( port, host );
 server.on( 'error', onError );

@@ -1,0 +1,54 @@
+<% include ../partials/header.ejs %>
+<body id="signin">
+<div class="mdl-layout" id="signin-main-layout">
+
+  <main class="mdl-layout__content">
+    <div class="mdl-grid">
+      <div class="mdl-cell mdl-cell--4-col md-cell--8-col-tablet mdl-cell--4-offset mdl-cell--2-offset-tablet">
+        <div class="ubfm-signin-form mdl-card mdl-shadow--2dp">
+          <div class="mdl-card__title">
+            <h2 class="mdl-card__title-text">UrbanFM App Monitor</h2>
+          </div>
+          <div class="mdl-card__supporting-text">
+            <p><strong>Inscription</strong></p>
+            <p>Vous devez créer un administrateur pour gérer l'application</p>
+            <p id="message" class="text-error"></p>
+            <form id="signin-form" action="/signup" method="post" onsubmit="event.preventDefault();">
+
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input type="text" name="username" id="username" class="mdl-textfield__input" required>
+                <label for="username" class="mdl-textfield__label">Nom d'utilisateur</label>
+                <strong><span class="mdl-textfield__error"></span></strong>
+              </div>
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input type="password" name="password" id="password" class="mdl-textfield__input" required>
+                <label for="password" class="mdl-textfield__label">Mot de passe</label>
+                <strong><span class="mdl-textfield__error"></span></strong>
+              </div>
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input type="password" name="confirmed" id="confirmed" class="mdl-textfield__input" required>
+                <label for="confirmed" class="mdl-textfield__label">Confirmer le mot de passe</label>
+                <strong><span class="mdl-textfield__error"></span></strong>
+              </div>
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" id="_csrf">
+              <button id="submit-button" type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" disabled>Soumission &nbsp;&nbsp;<i class="mdl-spinner mdl-js-spinner mdl-spinner--single-color is-active hide-opacity"></i></button>
+
+            </form>
+          </div>
+          <div class="mdl-card__menu">
+            <button id="reset-form" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+              <i class="material-icons">replay</i>
+            </button>
+          </div>
+        </div>
+        <hr>
+        <p>Développé par <a href="https://facebook.com/Bface.Style" target="_blank">Dan T. NGOSSINGA</a> pour <a
+                  href="http://urbanfm.fm" target="_blank">Urban FM</a></p>
+        <p>© 2016 - Urban FM, tous droits reservés</p>
+      </div>
+    </div>
+  </main>
+  <div class="mdl-layout-spacer"></div>
+</div>
+
+<% include ../partials/footer.ejs %>
