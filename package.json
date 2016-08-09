@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "forever -w ./bin/www"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
@@ -19,7 +19,6 @@
     "express": "4.13.x",
     "express-session": "^1.14.0",
     "fcm-push": "^1.0.7",
-    "forever": "^0.15.2",
     "hpp": "^0.2.1",
     "https": "^1.0.0",
     "method-override": "^2.3.6",
