@@ -12,9 +12,6 @@ var server = http.createServer( app ),
 var port = normalizePort( process.env.VCAP_APP_PORT || 3000 );
 var host = process.env.VCAP_APP_HOST || 'localhost';
 
-io.use( function ( socket, next ) {
-    sessionMiddleware( socket.request, socket.request.res, next );
-} );
 
 require( '../app/socket/io' )( io );
 
