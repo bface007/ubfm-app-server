@@ -14,7 +14,7 @@ module.exports = function (app, express) {
 
     router
         .get( '/messages', function ( req, res ) {
-            Message.find( {} ).populate( "__author" ).sort( "-created" ).exec( function ( err, messages ) {
+            Message.find( {} ).populate( "__author" ).sort( "created" ).exec( function ( err, messages ) {
                 if( err ) {
                     console.error("api get messages ", err);
                     return res.send(err);
