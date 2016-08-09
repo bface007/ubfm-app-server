@@ -7,7 +7,6 @@ var User = require( '../model/user' ),
 module.exports = function ( io ) {
     io.on( 'connection', function ( socket ) {
         console.log( 'a user connected' );
-        var userId = socket.request.session.passport.user;
 
         socket.on( 'have sent new message', function ( data ) {
             data = data.message;
