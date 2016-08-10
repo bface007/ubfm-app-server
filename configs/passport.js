@@ -84,6 +84,62 @@ module.exports = function ( passport, redisClient ) {
         } );
     } ) );
 
+
+    // =========================================================================
+    // LOCAL SIGNUP EX ============================================================
+    // =========================================================================
+    // we are using named strategies since we have one for login and one for signup
+    // by default, if there was no name, it would just be called 'local'
+    passport.use( 'local-signup-ex', new LocalStrategy( {
+        usernameField : 'username',
+        passwordField : 'password',
+        passReqToCallback : true
+    }, function ( req, username, password, done ) {
+
+        // asynchronous
+        // User.findOne wont fire unless data is sent back
+        process.nextTick( function () {
+
+            if( ! validator.isAlphanumeric( username, 'en-GB' ) )
+                return done( null, false, { 'signupMessage': 'Le nom d\'utilisateur ne doit comporter que des caractères alphanumériques sans accent et sans espace.', input: 'username' } );
+
+            if( ! validator.isLength( username, { min: 4, max: 25 } ) )
+                return done( null, false, { signupMessage: 'Le nom d\'utilisateur doit être entre 4 et 25 caractères', input: 'username' } );
+
+            if( password != req.body.confirmed )
+                return done( null, false, { 'signupMessage': 'Le mot de passe et la confirmation ne correspondent pas.', input: 'password+confirm' } );
+
+            if( ! validator.isLength( password, { min: 8 } ) )
+                return done( null, false, { signupMessage: 'Le mot de passe doit être d\'au moins 8 caractères', input: 'password' } );
+
+            if( validator.contains( password, " " ) )
+                return done( null, false, { signupMessage: 'Le mot de passe ne peut pas contenir d\'espace', input: 'password' } );
+
+            User.findOne( { username: username }, function ( err, user ) {
+                if( err )
+                    return done( err );
+
+                if( user )
+                    return done( null, false, { 'signupMessage': 'Ce nom d\'utilisateur est déja pris', input: 'username' } );
+                else {
+                    // if there is no user with that email
+                    // create the user
+                    var newUser = new User();
+                    newUser.username = username;
+                    newUser.password = password;
+                    newUser.role = req.body.role;
+
+                    // save the user
+                    newUser.save( function( err ) {
+                        if ( err )
+                            throw err;
+                        return done( null, newUser );
+                    } );
+                }
+            } );
+        } );
+    } ) );
+
     passport.use( 'local-login', new LocalStrategy( {
         usernameField : 'username',
         passwordField : 'password',

@@ -4,6 +4,7 @@
 
 var utils = require( '../../utils' ),
     Message = require( '../model/message' ),
+    User = require( '../model/user' ),
     moment = require( 'moment' ),
     config = require( '../../configs/global' ),
     FCM = require( '../../fcm' );
@@ -37,6 +38,42 @@ module.exports = function (app, express, passport, redisClient ) {
                 } );
             } );
 
+        } )
+        .get( '/users', isLoggedIn, function ( req, res ) {
+            User.find( {} ).sort( '-registered' ).exec( function ( err, users ) {
+                if( err )
+                    return res.send(err);
+                
+                res.render( 'pages/dashboard-users', {
+                    pageTitle : 'Utilisateurs',
+                    appSide : req.routes_from,
+                    user : req.user,
+                    users : users,
+                    moment : moment,
+                    alerts: {
+                        error: [req.flash( 'error' ), req.flash( 'input' )],
+                        success : [req.flash( 'success' )]
+                    }
+
+                } );
+            } );
+        } )
+        .post( '/users', isLoggedIn, function ( req, res, next ) {
+            passport.authenticate( 'local-signup-ex', function ( err, user, info ) {
+
+                if( err )
+                    return res.send( err );
+
+                if( ! user ) {
+                    req.flash( 'error', info.signupMessage );
+                    req.flash( 'input', info.username )
+                }else {
+                    req.flash( 'success', "L'utilisateur a bien été créé." )
+                }
+
+                return res.redirect('/dashboard/users');
+
+            } )( req, res, next )
         } )
         .get( '/test-fcm', function ( req, res ) {
             var fcm = new FCM( config.cloud_messaging.server_key ),

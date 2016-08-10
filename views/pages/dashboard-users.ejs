@@ -1,0 +1,130 @@
+<% include ../partials/header.ejs %>
+<body id="dashboard">
+
+<div class="dashboard-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+  <header class="dashboard-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
+    <div class="mdl-layout__header-row">
+      <span class="mdl-layout-title"><%= pageTitle %></span>
+      <div class="mdl-layout-spacer"></div>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+        <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
+          <i class="material-icons">search</i>
+        </label>
+        <div class="mdl-textfield__expandable-holder">
+          <input class="mdl-textfield__input" type="text" id="search">
+          <label class="mdl-textfield__label" for="search">Tapez votre recherche...</label>
+        </div>
+      </div>
+      <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
+        <i class="material-icons">more_vert</i>
+      </button>
+      <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
+        <li class="mdl-menu__item"><a href="/logout">Deconnexion</a></li>
+      </ul>
+    </div>
+  </header>
+  <div class="dashboard-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+    <header class="drawer-header">
+      <img src="<% if( user.avatar ) { %><%= user.avatar %><% } else { %>/assets/img/users.png<% } %>" class="avatar">
+      <div class="avatar-dropdown">
+        <span><%= user.username %></span>
+        <div class="mdl-layout-spacer"></div>
+        <!--<button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button&#45;&#45;icon">-->
+        <!--<i class="material-icons" role="presentation">arrow_drop_down</i>-->
+        <!--<span class="visuallyhidden">Accounts</span>-->
+        <!--</button>-->
+        <!--<ul class="mdl-menu mdl-menu&#45;&#45;bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">-->
+        <!--<li class="mdl-menu__item">hello@example.com</li>-->
+        <!--<li class="mdl-menu__item">info@example.com</li>-->
+        <!--<li class="mdl-menu__item"><i class="material-icons">add</i>Add another account...</li>-->
+        <!--</ul>-->
+      </div>
+    </header>
+    <nav class="dashboard-navigation mdl-navigation mdl-color--blue-grey-800">
+      <a class="mdl-navigation__link" href="/dashboard"><i class=" material-icons" role="presentation">home</i>Tableau de bord</a>
+      <a class="mdl-navigation__link active" href="/dashboard/users"><i class=" material-icons" role="presentation">people</i>Utilisateurs</a>
+      <!--<a class="mdl-navigation__link" href=""><i class=" material-icons" role="presentation">inbox</i>Inbox</a>-->
+      <!--<a class="mdl-navigation__link" href=""><i class=" material-icons" role="presentation">delete</i>Trash</a>-->
+      <!--<a class="mdl-navigation__link" href=""><i class=" material-icons" role="presentation">report</i>Spam</a>-->
+      <!--<a class="mdl-navigation__link" href=""><i class=" material-icons" role="presentation">forum</i>Forums</a>-->
+      <!--<a class="mdl-navigation__link" href=""><i class="material-icons" role="presentation">flag</i>Updates</a>-->
+      <!--<a class="mdl-navigation__link" href=""><i class="material-icons" role="presentation">local_offer</i>Promos</a>-->
+      <!--<a class="mdl-navigation__link" href=""><i class="material-icons" role="presentation">shopping_cart</i>Purchases</a>-->
+      <!--<a class="mdl-navigation__link" href=""><i class="material-icons" role="presentation">people</i>Social</a>-->
+      <!--<div class="mdl-layout-spacer"></div>-->
+      <!--<a class="mdl-navigation__link" href=""><i class="mdl-color-text&#45;&#45;blue-grey-400 material-icons" role="presentation">help_outline</i><span class="visuallyhidden">Help</span></a>-->
+    </nav>
+  </div>
+  <main class="mdl-layout__content mdl-color--grey-100">
+    <div class="mdl-grid">
+      <div class="mdl-cell mdl-cell--12-col">
+        <% if( alerts.error[0].length > 0 ) { %>
+        <div class="alert error mdl-shadow--2dp">
+          <%= alerts.error[0] %>
+        </div>
+        <% }else if( alerts.success[0].length > 0 ) { %>
+        <div class="alert success mdl-shadow--2dp">
+          <%= alerts.success[0] %>
+        </div>
+        <% } %>
+      </div>
+    </div>
+    <div class="mdl-grid dashboard-content">
+      <div class="mdl-cell mdl-cell--8-col users-table-wrapper">
+        <h4>Liste des utilisateurs</h4>
+        <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+          <thead>
+          <tr>
+            <th class="mdl-data-table__cell--non-numeric">Nom d'utilisateur</th>
+            <th>Type de compte</th>
+            <th>Date d'inscription</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% users.forEach( function ( userFromLoop ) { %>
+          <tr>
+            <td class="mdl-data-table__cell--non-numeric"><%= userFromLoop.username %></td>
+            <td><% if( userFromLoop.role == "superadmin" ){ %>Administrateur<% }else if( userFromLoop.role == "admin" ) { %>Modérateur<% } else if( userFromLoop.role == "user" ){ %>Utilisateur simple<% } %></td>
+            <td><%= moment( userFromLoop.registered ).format("DD-mm-YYYY à HH:mm") %></td>
+          </tr>
+          <% } ) %>
+          </tbody>
+        </table>
+      </div>
+      <div class="mdl-cell mdl-cell--4-col users-form">
+        <h4>Créer un nouvel utilisateur</h4>
+        <form action="/dashboard/users" method="post" id="user-form">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input type="text" name="username" id="username" class="mdl-textfield__input" required>
+            <label for="username" class="mdl-textfield__label">Nom d'utilisateur</label>
+            <strong><span class="mdl-textfield__error"></span></strong>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input type="password" name="password" id="password" class="mdl-textfield__input" required>
+            <label for="password" class="mdl-textfield__label">Mot de passe</label>
+            <strong><span class="mdl-textfield__error"></span></strong>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input type="password" name="confirmed" id="confirmed" class="mdl-textfield__input" required>
+            <label for="confirmed" class="mdl-textfield__label">Confirmer le mot de passe</label>
+            <strong><span class="mdl-textfield__error"></span></strong>
+          </div>
+          <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-1">
+            <input type="radio" id="option-1" class="mdl-radio__button" name="role" value="superadmin" checked>
+            <span class="mdl-radio__label">Super Administrateur</span>
+          </label>
+          <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-2">
+            <input type="radio" id="option-2" class="mdl-radio__button" name="role" value="admin">
+            <span class="mdl-radio__label">Modérateur</span>
+          </label>
+          <hr>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" id="_csrf">
+          <button id="submit-button" type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">Soumission &nbsp;&nbsp;<i class="mdl-spinner mdl-js-spinner mdl-spinner--single-color is-active hide-opacity"></i></button>
+
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+
+<% include ../partials/footer.ejs %>

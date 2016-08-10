@@ -1,7 +1,8 @@
 /**
  * Created by bface007 on 24/07/2016.
  */
-var Message = require( '../model/message' );
+var Message = require( '../model/message' ),
+    User = require( '../model/user' );
 
 module.exports = function (app, express) {
     var router = express.Router();
@@ -21,6 +22,23 @@ module.exports = function (app, express) {
                 }
 
                 res.json( messages );
+            } )
+        } )
+        .post( '/users', function ( req, res ) {
+            var newUser = new User();
+            newUser.username = req.body.username;
+            newUser.avatar = req.body.picture;
+            newUser.role = "user";
+            newUser.facebook.id = req.body.id;
+            newUser.facebook.email = req.body.email;
+            newUser.facebook.name = req.body.username;
+            newUser.facebook.link = req.body.link;
+            newUser.facebook.gender = req.body.gender;
+
+            newUser.save( function (err) {
+                if(err)
+                    return res.send(err);
+                res.json(newUser);
             } )
         } );
     

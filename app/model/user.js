@@ -15,16 +15,23 @@ var userSchema = mongoose.Schema( {
     },
     password : {
         type: String,
-        required: true,
+        required: false,
         select: false,
         trim: true,
         minlength: 8
     },
     registered: {
-        type: Date,
-        select: false
+        type: Date
     },
-    avatar : String,
+    avatar : {
+        type: String,
+        default: "/assets/img/ubfm_logo_square.png"
+    },
+    role : {
+        type: String,
+        enum: ["superadmin", "admin", "user"],
+        default: "user"
+    },
     last_activity: Date,
     facebook : {
         id : {
@@ -36,7 +43,9 @@ var userSchema = mongoose.Schema( {
         email : {
             type: String
         },
-        name : String
+        name : String,
+        link : String,
+        gender : String
     }
 } );
 

@@ -6,6 +6,7 @@
 
     var submitBox = d.querySelector( "#submit-box" ),
         messageInput = submitBox.querySelector( "#message-input" ),
+        userForm = d.querySelector( "#user-form" ),
         submitBtn = submitBox.querySelector( "#submit-button" ),
         messagesList = d.querySelector( "#message-list" ),
         request = w.superagent,

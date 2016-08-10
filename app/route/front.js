@@ -50,7 +50,7 @@ module.exports = function (app, express, passport, redisClient ) {
                 appSide : req.routes_from
             } );
         })
-        .get( '/first-init', function ( req, res ) {
+        .get( '/first-init', checkIfThereIsAlreadyOneUser, function ( req, res ) {
             res.render( 'pages/signup', {
                 pageTitle : 'Première utilisation',
                 message : req.flash( 'signupMessage' ),
