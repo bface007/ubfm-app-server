@@ -44,7 +44,7 @@ module.exports = function (app, express) {
         .post( '/messages', function ( req, res ) {
             var newMessage = new Message();
             newMessage.content = req.body.content;
-            newMessage.__author = req.body.userid;
+            newMessage.__author = req.body.userId;
 
             newMessage.save( function (err) {
                 if(err)
