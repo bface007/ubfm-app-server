@@ -9,7 +9,8 @@ module.exports = function ( io ) {
         console.log( 'a user connected' );
 
         socket.on( 'have sent new message', function ( data ) {
-
+            if(typeof data == 'string')
+                data = JSON.parse(data);
             console.log( "socket.io >>> have sent new message ", data );
             data = data.message;
             Message.findOne( { _id: data._id } ).populate( '__author' ).exec( function ( err, message ) {
