@@ -9,11 +9,12 @@ module.exports = function ( io ) {
         console.log( 'a user connected' );
 
         socket.on( 'have sent new message', function ( data ) {
-            data = data.message;
+
             console.log( "socket.io >>> have sent new message ", data );
+            data = data.message;
             Message.findOne( { _id: data._id } ).populate( '__author' ).exec( function ( err, message ) {
                 if( err ) {
-                    console.error( "socket.io >>> have sent new message : ", err );
+                    console.log( "socket.io >>> have sent new message : ", err );
                     return;
                 }
                 if( message )
