@@ -49,7 +49,11 @@ module.exports = function (app, express) {
             newMessage.save( function (err) {
                 if(err)
                     return res.send(err);
-                res.json( newMessage );
+                Message.findOne( { _id: newMessage._id } ).populate( "__author" ).exec( function (err, message) {
+                    if(err)
+                        return res.send(err);
+                    res.json(message);
+                } )
             } )
         } );
     
