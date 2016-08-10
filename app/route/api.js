@@ -25,21 +25,30 @@ module.exports = function (app, express) {
             } )
         } )
         .post( '/users', function ( req, res ) {
-            var newUser = new User();
-            newUser.username = req.body.username;
-            newUser.avatar = req.body.picture;
-            newUser.role = "user";
-            newUser.facebook.id = req.body.id;
-            newUser.facebook.email = req.body.email;
-            newUser.facebook.name = req.body.username;
-            newUser.facebook.link = req.body.link;
-            newUser.facebook.gender = req.body.gender;
-
-            newUser.save( function (err) {
+            User.findOne( { username: req.body.username }, function (err, user) {
                 if(err)
                     return res.send(err);
-                res.json(newUser);
-            } )
+                if(user)
+                    res.json(user);
+                else {
+                    var newUser = new User();
+                    newUser.username = req.body.username;
+                    newUser.avatar = req.body.picture;
+                    newUser.role = "user";
+                    newUser.facebook.id = req.body.id;
+                    newUser.facebook.email = req.body.email;
+                    newUser.facebook.name = req.body.username;
+                    newUser.facebook.link = req.body.link;
+                    newUser.facebook.gender = req.body.gender;
+
+                    newUser.save( function (err) {
+                        if(err)
+                            return res.send(err);
+                        res.json(newUser);
+                    } );
+                }
+            } );
+
         } )
         .post( '/messages', function ( req, res ) {
             var newMessage = new Message();
