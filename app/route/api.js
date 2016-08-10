@@ -40,6 +40,17 @@ module.exports = function (app, express) {
                     return res.send(err);
                 res.json(newUser);
             } )
+        } )
+        .post( '/messages', function ( req, res ) {
+            var newMessage = new Message();
+            newMessage.content = req.body.content;
+            newMessage.__author = req.body.userid;
+
+            newMessage.save( function (err) {
+                if(err)
+                    return res.send(err);
+                res.json( newMessage );
+            } )
         } );
     
     return router;
