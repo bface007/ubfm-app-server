@@ -9,7 +9,7 @@ var app = require( '../app' ).app,
 var server = http.createServer( app ),
     io = socket( server );
 
-var port = normalizePort( process.env.VCAP_APP_PORT || 3000 );
+var port = normalizePort( process.env.OPENSHIFT_NODEJS_PORT || 8080 );
 var host = process.env.VCAP_APP_HOST || 'localhost';
 
 
